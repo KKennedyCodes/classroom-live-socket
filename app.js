@@ -8,12 +8,14 @@ const app = express();
 app.use(index);
 const server = http.createServer(app);
 const io = socketIo(server); // < Interesting!
+
 const getApiAndEmit = async socket => {
   try {
     const res = await axios.get(
-      "https://localhost"
+      // "https://api.darksky.net/forecast/0f23df43ecd0c64a7d4178a809413a92/43.7695,11.2558"
+      "http://localhost:3000/codes/1"
     ); // Getting the data from DarkSky
-    socket.emit("FromAPI", res.data.currently.temperature); // Emitting a new message. It will be consumed by the client
+    socket.emit("FromAPI", res.data.color); // Emitting a new message. It will be consumed by the client
   } catch (error) {
     console.error(`Error: ${error.code}`);
   }
@@ -32,4 +34,5 @@ io.on("connection", socket => {
 });
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
+
 
